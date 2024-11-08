@@ -6,6 +6,8 @@ from model.io.upbound.aws.s3.bucket import v1beta1 as bucketv1beta1
 from model.io.upbound.aws.s3.bucketacl import v1beta1 as aclv1beta1
 from model.io.upbound.aws.s3.bucketversioning import v1beta1 as verv1beta1
 from model.io.upbound.aws.s3.bucketserversideencryptionconfiguration import v1beta1 as ssev1beta1
+from model.io.upbound.aws.s3.bucketownershipcontrols import v1beta1 as bocv1beta1
+from model.io.upbound.aws.s3.bucketpublicaccessblock import v1beta1 as pabv1beta1
 
 def compose(req: fnv1.RunFunctionRequest, rsp: fnv1.RunFunctionResponse):
     observed_xr = v1alpha1.XStorageBucket(**req.observed.composite.resource)
@@ -44,6 +46,49 @@ def compose(req: fnv1.RunFunctionRequest, rsp: fnv1.RunFunctionResponse):
         ),
     )
     resource.update(rsp.desired.resources[acl.metadata.name], acl)
+
+    boc = bocv1beta1.BucketOwnershipControls(
+        apiVersion="s3.aws.upbound.io/v1beta1",
+        kind="BucketOwnershipControls",
+        metadata=metav1.ObjectMeta(
+            name=xr_name + "-boc",
+        ),
+        spec=bocv1beta1.Spec(
+            forProvider=bocv1beta1.ForProvider(
+                region=params.region,
+                bucketRef=bocv1beta1.BucketRef(
+                    name = bucket_name,
+                ),
+                rule=[
+                    bocv1beta1.RuleItem(
+                        objectOwnership="BucketOwnerPreferred",
+                    ),
+                ],
+            )
+        )
+    )
+    resource.update(rsp.desired.resources[boc.metadata.name], boc)
+
+    pab = pabv1beta1.BucketPublicAccessBlock(
+        apiVersion="s3.aws.upbound.io/v1beta1",
+        kind="BucketPublicAccessBlock",
+        metadata=metav1.ObjectMeta(
+            name=xr_name + "-pab",
+        ),
+        spec=pabv1beta1.Spec(
+            forProvider=pabv1beta1.ForProvider(
+                region=params.region,
+                bucketRef=pabv1beta1.BucketRef(
+                    name = bucket_name,
+                ),
+                blockPublicAcls=False,
+                ignorePublicAcls=False,
+                restrictPublicBuckets=False,
+                blockPublicPolicy=False,
+            )
+        )
+    )
+    resource.update(rsp.desired.resources[pab.metadata.name], pab)
 
     sse = ssev1beta1.BucketServerSideEncryptionConfiguration(
         apiVersion="s3.aws.upbound.io/v1beta1",

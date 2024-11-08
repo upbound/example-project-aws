@@ -25,11 +25,43 @@ _items: [any] = [
             }
         }
     },
+    s3v1beta1.BucketOwnershipControls{
+        metadata: _metadata("{}-boc".format(oxr.metadata.name))
+        spec = {
+            forProvider = {
+                bucketRef = {
+                    name = bucketName
+                }
+                region = params.region
+                rule:[{
+                    objectOwnership:"BucketOwnerPreferred"
+                }]
+            }
+        }
+    },
+    s3v1beta1.BucketPublicAccessBlock{
+        metadata: _metadata("{}-pab".format(oxr.metadata.name))
+        spec = {
+            forProvider = {
+                bucketRef = {
+                    name = bucketName
+                }
+                region = params.region
+                blockPublicAcls: False
+                ignorePublicAcls: False
+                restrictPublicBuckets: False
+                blockPublicPolicy: False
+            }
+        }
+    },
     # ACL for the bucket
     s3v1beta1.BucketACL{
         metadata: _metadata("{}-acl".format(oxr.metadata.name))
         spec = {
             forProvider = {
+                bucketRef = {
+                    name = bucketName
+                }
                 region = params.region
                 acl = params.acl
             }

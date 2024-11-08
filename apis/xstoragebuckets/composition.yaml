@@ -1,7 +1,6 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  creationTimestamp: null
   name: xstoragebuckets.platform.example.com
 spec:
   compositeTypeRef:

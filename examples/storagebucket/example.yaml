@@ -7,4 +7,4 @@ spec:
   parameters:
     region: us-west-1
     versioning: true
-    acl: public
+    acl: public-read
