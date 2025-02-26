@@ -1,0 +1,15 @@
+{{ if $bucket_external_name }}
+
+apiVersion: s3.aws.upbound.io/v1beta1
+kind: BucketOwnershipControls
+metadata:
+  annotations:
+    {{ setResourceNameAnnotation "boc" }}
+spec:
+  forProvider:
+    region: {{ $params.region }}
+    bucket: {{ $bucket_external_name }}
+    rule:
+      - objectOwnership: BucketOwnerPreferred
+
+{{ end }}

@@ -9,7 +9,7 @@ spec:
   mode: Pipeline
   pipeline:
   - functionRef:
-      name: upbound-example-project-awscompose-bucket-kcl
+      name: upbound-example-project-awscompose-bucket-go-templating
     step: compose-bucket-kcl
   - functionRef:
       name: crossplane-contrib-function-auto-ready

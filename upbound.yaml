@@ -15,3 +15,4 @@ spec:
     This is where you can add a readme for your project.
   repository: xpkg.upbound.io/upbound/example-project-aws
   source: github.com/upbound/example-project-aws
+  architectures: ["amd64"]

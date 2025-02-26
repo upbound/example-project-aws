@@ -1,0 +1,17 @@
+{{ if $params.versioning }}
+{{ if $bucket_external_name }}
+
+apiVersion: s3.aws.upbound.io/v1beta1
+kind: BucketVersioning
+metadata:
+  annotations:
+    {{ setResourceNameAnnotation "versioning" }}
+spec:
+  forProvider:
+    region: {{ $params.region }}
+    bucket: {{ $bucket_external_name }}
+    versioningConfiguration:
+      - status: Enabled
+
+{{ end }}
+{{ end }}

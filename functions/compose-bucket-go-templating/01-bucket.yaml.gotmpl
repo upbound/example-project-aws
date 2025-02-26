@@ -1,0 +1,17 @@
+{{ $xr := getCompositeResource . }}
+{{ $params := $xr.spec.parameters }}
+
+apiVersion: s3.aws.upbound.io/v1beta1
+kind: Bucket
+metadata:
+  annotations:
+    {{ setResourceNameAnnotation "bucket" }}
+spec:
+  forProvider:
+    region: {{ $params.region }}
+
+{{ $bucket := getComposedResource . "bucket" }}
+{{ $bucket_external_name := "" }}
+{{ if $bucket }}
+{{ $bucket_external_name = get $bucket.metadata.annotations "crossplane.io/external-name" }}
+{{ end }}
