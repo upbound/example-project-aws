@@ -1,5 +1,11 @@
 # example-project-aws
 
+> [!IMPORTANT]
+>
+> This repository is no longer maintained. An equivalent Upbound project
+> template is available at
+> [upbound/project-template-aws-s3](https://github.com/upbound/project-template-aws-s3).
+
 An example Upbound control plane project for Amazon Web Services (AWS).
 
 A control plane project is a source-level representation of a Crossplane control
